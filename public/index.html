@@ -1,0 +1,40 @@
+<html ng-app="airline">
+<head>
+	<title>Demo</title>
+	<script type="text/javascript" src="js/lib/d3.js"></script>
+	<script type="text/javascript" src="js/lib/angular.js"></script>
+	<script type="text/javascript" src="js/lib/angular-ui-router.js"></script>
+	<script type="text/javascript" src="js/lib/angular-treeview.js"></script>
+	<script type="text/javascript" src="js/lib/angular-resource.min.js"></script>
+	<script type="text/javascript" src="js/controllers/app.js"></script>
+	<script type="text/javascript" src="js/controllers/destinations.js"></script>
+	<script type="text/javascript" src="js/controllers/flights.js"></script>
+	<script type="text/javascript" src="js/controllers/import.js"></script>
+	<script type="text/javascript" src="js/controllers/reservations.js"></script>
+	<script type="text/javascript" src="js/controllers/airport.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	<script type="text/javascript" src="js/services.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/angular-treeview.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css">
+</head>
+<body>
+	<div class="container" ng-controller="AppCtrl">
+		<h1>Demo</h1>
+
+	<!-- 	<ul class="nav nav-pills">
+			<li ng-class="destinationsActive">
+				<a href="#">Destinations</a>
+			</li>
+			<li ng-class="flightsActive">
+				<a href="#/flights">Flights</a>
+			</li>
+			<li ng-class="reservationsActive">
+				<a href="#/reservations">Reservations</a>
+			</li>
+		</ul> -->
+
+		<div class="" ui-view>
+	</div>
+</body>
+</html>

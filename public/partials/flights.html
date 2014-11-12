@@ -1,0 +1,33 @@
+<h3>Search for flights</h3>
+
+<div class="controls controls-row">
+  <input type="text" class="input-small" placeholder="Origin" ng-model="search.origin" />
+  <input type="text" class="input-small" placeholder="Destination" ng-model="search.destination" />
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Origin</th>
+      <th>Destination</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="flight in flights | filter:search">
+      <td>{{flight.number}}</td>
+      <td>
+        <a ng-href="#/airports/{{flight.origin}}">
+          {{flight | originTitle}}
+        </a>
+      </td>
+      <td>
+        <a ng-href="#/airports/{{flight.destination}}">
+          {{flight | destinationTitle}}
+        </a>
+      </td>
+      <td>{{flight.price | currency}}</td>
+    </tr>
+  </tbody>
+</table>
