@@ -1,14 +1,19 @@
 <div class="import">
-
+    {{attributesName}}
+    <div ng-repeat="attr in abc.currentNode.element[attributesName]">
+        {{attr.name}} : <input type="text" name="userName" placeholder="attr.value" ng-model="attr.value">
+    </div>
     <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/contactSmiley-5.svg" ng-click="" import-svg>
     </div>
-    <div id="a"></div>
-    
+
+    <div ng-click="state(1)">11111111</div>
+    <div ng-click="state(2)">22222222</div>
+   <!--  <input type="text" name="userName" placeholder="abc.currentNode.element.style.fill" ng-model="abc.currentNode.element.style.fill"> -->
     <span><b>Selected Node</b> : {{abc.currentNode.name}}</span>
     <div
         data-angular-treeview="true"
         data-tree-id="abc"
-        data-tree-model="sss"
+        data-tree-model="svg"
         data-node-id="name"
         data-node-label="name"
         data-node-children="children" >
