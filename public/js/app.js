@@ -14,6 +14,19 @@ app.directive('importSvg', function() {
             var gObject = d3.select(svgImage);
             gObject.style("width", "45px");
             scope.svg = gObject[0];
+
+            function create(a) {
+                var obj={};
+                obj.element=a;
+                obj.name=a.id +":" +a.tagName;
+                obj.children=[];
+                for (var i = 0; i < a.children.length; i++) {
+                    obj.children.push(create(a.children[i]));
+                };
+                return obj
+            }
+            scope.sss=[create(gObject[0][0])];
+            console.log(scope.sss);
             console.log(gObject[0][0]);
             console.log(gObject[0][0].children[3].children);
             console.log(gObject[0][0].children[3].children[0]);

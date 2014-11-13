@@ -86,6 +86,8 @@
 
 							//set currentNode
 							scope[treeId].currentNode = selectedNode;
+							
+							console.log(scope[treeId]);
 						};
 					}
 
