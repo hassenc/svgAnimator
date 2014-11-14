@@ -4,11 +4,11 @@ app.directive('applyChange', function() {
     return {
         link: function(scope, element, attrs) {
             scope.$watch('abc.currentNode', function(newValue) {
-                if (newValue) {
-                    for (var i = 0; i < newValue.element.attributes.length; i++) {
+                if (newValue !== undefined) {
+                    for (var i = 0; i < scope.abc.currentNode.element.attributes.length; i++) {
                         scope.$watchCollection('abc.currentNode.element.attributes[' + i + ']', function(newAttribute) {
-                            if (newAttribute) {
-                                newValue.element[scope.attributesName][newAttribute.name] = newAttribute.value;
+                            if (newAttribute !== undefined) {
+                                scope.abc.currentNode.element[scope.attributesName][newAttribute.name] = newAttribute.value;
                             }
                         });
 
@@ -30,7 +30,6 @@ app.directive('importSvg', function() {
             var svgImage = element[0].children[0];
             var gObject = d3.select(svgImage);
             gObject.style("width", "45px");
-            scope.svg = gObject[0];
 
             function create(a) {
                 var obj = {};
@@ -52,19 +51,6 @@ app.directive('importSvg', function() {
             };
 
 
-            function createState2(a, stateNumber) {
-
-                a["attributes_" + stateNumber] = [];
-                for (var i = 0; i < a.attributes.length; i++) {
-                    a["attributes_" + stateNumber][i] = {};
-                    a["attributes_" + stateNumber][i].name = a.attributes[i].name;
-                    a["attributes_" + stateNumber][i].value = a.attributes[i].value;
-                };
-                for (var i = 0; i < a.children.length; i++) {
-                    createState(a.children[i], stateNumber);
-                };
-            };
-
             function createState(a, stateNumber) {
 
                 a["attributes_" + stateNumber] = {};
@@ -82,22 +68,26 @@ app.directive('importSvg', function() {
 
             createState(gObject[0][0], 1);
             createState(gObject[0][0], 2);
-            // console.log(gObject[0][0]["attributes_2"]);
-            // gObject[0][0]["attributes_2"].opacity = "0.3";
-
-            // d3.select(gObject[0][0]).attr(gObject[0][0]["attributes_2"]);
-            // d3.select(gObject[0][0]).attr({"xmlns:xlink": "http://www.w3.org/1999/xlink"});
-
-            // console.log(gObject[0][0].children[3].children[0]["attributes_" + 2]);
 
             scope.svg = [create(gObject[0][0])];
-            console.log(scope.svg);
-            // console.log(gObject[0][0]);
-            // console.log(gObject[0][0].children[3].children);
-            // console.log(gObject[0][0].children[3].children[0]);
-            // gObject[0][0].children[3].children[0].attributes_2 = {};
-            // d3.select(gObject[0][0].children[3].children[0]).attr(attributesFromObject(gObject[0][0].children[3].children[0]));
-        }
+            console.log(scope.svg);}
+    }
+});
+
+
+
+app.directive('animation', function() {
+    return {
+        templateUrl: function(elem, attrs) {
+            return attrs.templateUrl || '/img/contactSmiley-5.svg'
+        },
+        link: function(scope, element, attrs) {
+            var allSmileys = element[0].parentNode.children;
+            var svgImage = element[0].children[0];
+            var gObject = d3.select(svgImage);
+            gObject.style("width", "45px");
+
+            scope.animation = scope.svg;
     }
 });
 
