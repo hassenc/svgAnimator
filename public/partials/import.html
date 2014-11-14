@@ -1,4 +1,4 @@
-<div class="import">
+<div class="import" apply-change>
     {{attributesName}}
     <div ng-repeat="attr in abc.currentNode.element.attributes">
         {{attr.name}} : <input type="text" name="userName" placeholder="attr.value" ng-model="attr.value">
@@ -8,6 +8,7 @@
 
     <div ng-click="state(1)">11111111</div>
     <div ng-click="state(2)">22222222</div>
+    <div ng-click="animateState(svg[0],1,2)">animate</div>
    <!--  <input type="text" name="userName" placeholder="abc.currentNode.element.style.fill" ng-model="abc.currentNode.element.style.fill"> -->
     <span><b>Selected Node</b> : {{abc.currentNode.name}}</span>
     <div
