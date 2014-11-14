@@ -5,30 +5,39 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
         $scope.attributesName = "attributes_1";
         $scope.state = function(stateNumber) {
             $scope.attributesName = "attributes_" + stateNumber;
-            $scope.applyAttributes($scope.svg[0]);
+            $scope.applyNewAttributes($scope.svg[0]);
             console.log("done")
         };
 
 
-        $scope.applyAttributes = function(a) {
+        $scope.applyNewAttributes = function(a) {
             var el = a;
-            console.log(el.element[$scope.attributesName])
-            d3.select(el).attr($scope.attributesOfObject(el.element));
+            d3.select(el.element).attr(el.element[$scope.attributesName]);
             for (var i = 0; i < el.children.length; i++) {
                 $scope.applyAttributes(el.children[i]);
             };
         };
 
 
-        $scope.attributesOfObject= function(a) {
-            obj = {};
-            console.log(a[$scope.attributesName]);
-            for (var i = 0; i < a[$scope.attributesName].length; i++) {
-                obj[a[$scope.attributesName][i].name] = a[$scope.attributesName][i].value;
-            };
-            console.log(obj)
-            return obj;
+        $scope.applyChange = function() {
+            scope.$watch('svg', function(newValue, oldValue) {
+              console.log(newValue, oldValue);
+            });
         };
+
+
+        // $scope.attributesOfObject= function(a) {
+        //     obj = {};
+        //     console.log(a[$scope.attributesName]);
+        //     for (var i = 0; i < a[$scope.attributesName].length; i++) {
+        //         obj[a[$scope.attributesName][i].name] = a[$scope.attributesName][i].value;
+        //     };
+        //     console.log(obj)
+        //     return obj;
+        // };
 
     }
 ]);
+
+
+//todo ajouter un attribut sur un etat, le rajouter sur les autres, parce que de toute facon c'est rajoute sur attributs

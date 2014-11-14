@@ -1,6 +1,6 @@
 <div class="import">
     {{attributesName}}
-    <div ng-repeat="attr in abc.currentNode.element[attributesName]">
+    <div ng-repeat="attr in abc.currentNode.element.attributes">
         {{attr.name}} : <input type="text" name="userName" placeholder="attr.value" ng-model="attr.value">
     </div>
     <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/contactSmiley-5.svg" ng-click="" import-svg>
