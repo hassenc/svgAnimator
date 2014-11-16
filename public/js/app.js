@@ -5,13 +5,17 @@ app.directive('applyChange', function() {
         link: function(scope, element, attrs) {
             scope.$watch('editTree.currentNode', function(newValue) {
                 if (newValue !== undefined) {
+                    var x = svgedit.path.getPath_(scope.editTree.currentNode.element);
+                    console.log(x);
                     for (var i = 0; i < scope.editTree.currentNode.element.attributes.length; i++) {
-                        scope.$watchCollection('editTree.currentNode.element.attributes[' + i + ']', function(newAttribute) {
-                            if (newAttribute !== undefined) {
-                                scope.editTree.currentNode.element[scope.attributesName][newAttribute.name] = newAttribute.value;
+                        scope.$watch('editTree.currentNode.element.attributes[' + i + '].value', function(j) {
+                            return function() {
+                                var attr = scope.editTree.currentNode.element.attributes[j];
+                                if (attr.value !== undefined) {
+                                    scope.editTree.currentNode.element[scope.attributesName][attr.name] = attr.value;
+                                }
                             }
-                        });
-
+                        }(i));
                     };
                 }
             });
@@ -27,8 +31,44 @@ app.directive('importSvg', function() {
         },
         link: function(scope, element, attrs) {
             var svgImage = element[0].children[0];
+            var container = element[0];
+
+            var curConfig = {
+                canvasName: 'default',
+                canvas_expansion: 3,
+                dimensions: [100, 100],
+                initFill: {
+                    color: 'FF0000', // solid red
+                    opacity: 1
+                },
+                initStroke: {
+                    width: 5,
+                    color: '000000', // solid black
+                    opacity: 1
+                },
+                initOpacity: 1,
+                imgPath: 'images/',
+                langPath: 'locale/',
+                extPath: 'extensions/',
+                jGraduatePath: 'jgraduate/images/',
+                extensions: ['ext-markers.js', 'ext-connector.js', 'ext-eyedropper.js', 'ext-shapes.js', 'ext-imagelib.js', 'ext-grid.js'],
+                initTool: 'select',
+                wireframe: false,
+                colorPickerCSS: null,
+                gridSnapping: false,
+                gridColor: "#000",
+                baseUnit: 'px',
+                snappingStep: 10,
+                showRulers: false
+            }
+            var svgCanvas = new $.SvgCanvas(container, curConfig);
+
+
+
+            svgCanvas.customImport(svgImage);
+
             var gObject = d3.select(svgImage);
-            gObject.style("width", "45px");
+
 
             function create(a) {
                 var obj = {};
@@ -46,7 +86,7 @@ app.directive('importSvg', function() {
 
             // console.log(scope.svg);
 
-          }
+        }
     }
 });
 

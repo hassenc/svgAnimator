@@ -104,14 +104,14 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
                     };
                     return obj
                 };
-                $scope.savedObject=_saveStates(parent);
-                return _saveStates(parent);
+                $scope.savedObject=JSON.stringify(_saveStates(parent));
+                return $scope.savedObject;
                 // return (JSON.parse(JSON.stringify(_saveStates(parent))));
         };
 
 
         $scope.loadFromObject = function(parent,savedStates) {
-                var savedObject= savedStates;
+                var savedObject= JSON.parse(savedStates);
                 // console.log(savedObject);
                 var parent = parent;
                 var nbStates=Object.keys(savedObject).length-1;
