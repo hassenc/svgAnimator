@@ -104,7 +104,7 @@ if (window.opera) {
 // Parameters:
 // container - The container HTML element that should hold the SVG root element
 // config - An object that contains configuration data
-$.SvgCanvas = function(container, config) {
+$.SvgCanvas = function(container, config, scope) {
     // Namespace constants
     var svgns = "http://www.w3.org/2000/svg",
         xlinkns = "http://www.w3.org/1999/xlink",
@@ -2182,7 +2182,6 @@ $.SvgCanvas = function(container, config) {
     // elemsToAdd - an array of DOM elements to add to the selection
     // showGrips - a boolean flag indicating whether the resize grips should be shown
     var addToSelection = this.addToSelection = function(elemsToAdd, showGrips) {
-        console.log("eeeeeeeeeeeeeeeeeeeee", elemsToAdd[0].pathSegList)
         if (elemsToAdd.length == 0) {
             return;
         }
@@ -2463,6 +2462,7 @@ $.SvgCanvas = function(container, config) {
                                 clearSelection(true);
                             }
                             addToSelection([mouse_target]);
+                            scope.$broadcast("selected_in_canvas", [mouse_target]);
                             justSelected = mouse_target;
                             pathActions.clear();
                         }

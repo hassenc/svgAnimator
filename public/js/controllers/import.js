@@ -22,8 +22,6 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
             $scope.stateList.push("attributes_" + ($scope.stateList.length +1));
             var parent =$scope.svg[0];
             var newStateNumber =$scope.stateList.length;
-            console.log(parent,newStateNumber);
-
             function _createState(a,stateNumber) {
                 //WARNING CAN DELETE ATTRIBUTES ?
                 a.element["attributes_" + stateNumber] = {};

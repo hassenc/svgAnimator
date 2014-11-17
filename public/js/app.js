@@ -3,15 +3,16 @@ var app = angular.module('airline', ['airlineServices', 'airlineFilters', 'ui.ro
 app.directive('applyChange', function() {
     return {
         link: function(scope, element, attrs) {
-            scope.$watch('editTree.currentNode', function(newValue) {
-                if (newValue !== undefined) {
-                    var x = svgedit.path.getPath_(scope.editTree.currentNode.element);
-                    console.log(x);
+            scope.$watch('editTree.currentNode', function(newValue,oldValue) {
+                if ((newValue !== undefined) && (newValue !== oldValue)) {
+                    scope.$broadcast("selected_in_tree", scope.editTree.currentNode.element);
+                    // var x = svgedit.path.getPath_(scope.editTree.currentNode.element);
+                    // console.log(x);
                     for (var i = 0; i < scope.editTree.currentNode.element.attributes.length; i++) {
                         scope.$watch('editTree.currentNode.element.attributes[' + i + '].value', function(j) {
                             return function() {
                                 var attr = scope.editTree.currentNode.element.attributes[j];
-                                if (attr.value !== undefined) {
+                                if (attr !== undefined) {
                                     scope.editTree.currentNode.element[scope.attributesName][attr.name] = attr.value;
                                 }
                             }
@@ -24,7 +25,7 @@ app.directive('applyChange', function() {
 });
 
 
-app.directive('importSvg', function() {
+app.directive('importSvg', ['$rootScope', function($rootScope) {
     return {
         templateUrl: function(elem, attrs) {
             return attrs.templateUrl || '/img/contactSmiley-5.svg'
@@ -61,25 +62,32 @@ app.directive('importSvg', function() {
                 snappingStep: 10,
                 showRulers: false
             }
-            var svgCanvas = new $.SvgCanvas(container, curConfig);
+            var svgCanvas = new $.SvgCanvas(container, curConfig, scope);
 
 
 
             svgCanvas.customImport(svgImage);
+            scope.$on("selected_in_canvas", function(event, args) {
+                console.log("selected_in_canvas")
+                selectedNode=scope.createTree(args[0])
+                //remove highlight from previous node
+                if (scope.editTree.currentNode && scope.editTree.currentNode.selected) {
+                    scope.editTree.currentNode.selected = undefined;
+                }
 
+                //set highlight to selected node
+                selectedNode.selected = 'selected';
+
+                //set currentNode
+                scope.editTree.currentNode = selectedNode;
+                console.log(args[0])
+            })
+            scope.$on("selected_in_tree", function(event, args) {
+                console.log("selected_in_tree")
+                svgCanvas.selectOnly([args]);
+            })
             var gObject = d3.select(svgImage);
 
-
-            function create(a) {
-                var obj = {};
-                obj.element = a;
-                obj.name = a.id + ":" + a.tagName;
-                obj.children = [];
-                for (var i = 0; i < a.children.length; i++) {
-                    obj.children.push(create(a.children[i]));
-                };
-                return obj
-            };
 
             scope.svg = [scope.createTree(gObject[0][0])];
             scope.createState();
@@ -88,7 +96,7 @@ app.directive('importSvg', function() {
 
         }
     }
-});
+}]);
 
 
 

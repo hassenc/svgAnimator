@@ -547,7 +547,6 @@ svgedit.path.Segment.prototype.setType = function(new_type, pts) {
 };
 
 svgedit.path.Path = function(elem) {
-	console.log("path")
 	if(!elem || elem.tagName !== "path") {
 		throw "svgedit.path.Path constructed without a <path> element";
 	}
@@ -561,11 +560,9 @@ svgedit.path.Path = function(elem) {
 
 // Reset path data
 svgedit.path.Path.prototype.init = function() {
-	console.log("cacao");
 	// Hide all grips, etc
 	$(svgedit.path.getGripContainer()).find("*").attr("display", "none");
 	var segList = this.elem.pathSegList;
-	console.log("segList",segList);
 	var len = segList.numberOfItems;
 	this.segs = [];
 	this.selected_pts = [];
@@ -882,7 +879,6 @@ svgedit.path.Path.prototype.update = function() {
 };
 
 svgedit.path.getPath_ = function(elem) {
-	console.log("getPath_",elem)
 	var p = pathData[elem.id];
 	if(!p) p = pathData[elem.id] = new svgedit.path.Path(elem);
 	return p;
