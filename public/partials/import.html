@@ -10,10 +10,9 @@
     <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/contactSmiley-5.svg" ng-click="" import-svg>
     </div>
 
-
-    
     <div ng-repeat="singleState in stateList">
         <div ng-click="state($index + 1)">{{singleState}}</div>
+        <input type="" name="" placeholder="" ng-model="durations[$index]">
     </div>
     <div ng-click="createState()">addState</div>
 
