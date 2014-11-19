@@ -68,6 +68,7 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
         //creates new dom svg, saves states, creates new tree, loads the attributes into new element
         $scope.export = function(a) {
             var savedStates = $scope.saveStates();
+            console.log(savedStates);
             var nbrStates = Object.keys(JSON.parse(savedStates)).length - 1;
             var durations = $scope.durations;
 

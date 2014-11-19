@@ -37,7 +37,7 @@ app.directive('importSvg', ['$rootScope', function($rootScope) {
             var curConfig = {
                 canvasName: 'default',
                 canvas_expansion: 3,
-                dimensions: [100, 100],
+                dimensions: [800, 600],
                 initFill: {
                     color: 'FF0000', // solid red
                     opacity: 1
