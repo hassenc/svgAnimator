@@ -99,6 +99,47 @@ app.directive('importSvg', ['$rootScope', function($rootScope) {
 }]);
 
 
+app.directive('animationResult', ['$rootScope', function($rootScope) {
+    return {
+        templateUrl: function(elem, attrs) {
+            return attrs.templateUrl || '/img/contactSmiley-5.svg'
+        },
+        link: function(scope, element, attrs) {
+            var svgImage = element[0].children[0];
+            var container = element[0];
+
+            var savedStates = scope.savedStates;
+            var nbrStates = Object.keys(JSON.parse(savedStates)).length - 1;
+            var durations = scope.durations;
+
+            var svgObject = d3.select(svgImage);
+            var newSvg = [scope.createTree(svgObject[0][0])];
+            scope.loadFromObject(newSvg[0], savedStates);
+
+            var cumulatedDurations = [];
+            cumulatedDurations[0] = 0;
+            cumulatedDurations[1] = parseInt(durations[0]);
+
+            for (var i = 1; i < durations.length; i++) {
+                cumulatedDurations[i + 1] = parseInt(durations[i]) + parseInt(cumulatedDurations[i]);
+            };
+            console.log(durations, cumulatedDurations,nbrStates)
+
+
+            for (var i = 0; i < nbrStates-1; i++) {
+                setTimeout(function(j) {
+                    console.log(j+1, j + 2, parseInt(durations[j]))
+                    return function() {
+                        scope.animateState(newSvg[0], j+1, j+2, parseInt(durations[j]));
+                    }
+                }(i), cumulatedDurations[i]);
+            };
+
+
+        }
+    }
+}]);
+
 
 app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$locationProvider',
     function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
@@ -107,6 +148,15 @@ app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$locationP
             url: '/',
             templateUrl: 'partials/import.html',
             controller: 'ImportCtrl',
+            // onEnter: ['$state', 'Account', function($state, Account) {
+            //     if (Account.hasRole('user')) {
+            //         $state.go('profile');
+            //     };
+            // }]
+        }).state('animation', {
+            url: '/animation',
+            templateUrl: 'partials/animation.html',
+            controller: 'AnimationCtrl',
             // onEnter: ['$state', 'Account', function($state, Account) {
             //     if (Account.hasRole('user')) {
             //         $state.go('profile');
