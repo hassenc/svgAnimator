@@ -3,7 +3,8 @@ var app = angular.module('airline', ['airlineServices', 'airlineFilters', 'ui.ro
 app.directive('applyChange', function() {
     return {
         link: function(scope, element, attrs) {
-            scope.$watch('editTree.currentNode', function(newValue,oldValue) {
+
+            scope.$watch('editTree.currentNode', function(newValue, oldValue) {
                 if ((newValue !== undefined) && (newValue !== oldValue)) {
                     scope.$broadcast("selected_in_tree", scope.editTree.currentNode.element);
                     // var x = svgedit.path.getPath_(scope.editTree.currentNode.element);
@@ -25,6 +26,91 @@ app.directive('applyChange', function() {
 });
 
 
+app.directive('statesAxis', function() {
+    return {
+        link: function(scope, element, attrs) {
+            var h = 50;
+            var axisWidth = 1000;
+            // X scale will fit all values from data[] within pixels 0-w
+            scope.stateAxisScale = d3.scale.linear().domain([0, 10000]).range([0, axisWidth]);
+            var invStateAxisScale = d3.scale.linear().domain([0, axisWidth]).range([0, 10000]);
+            var xAxis = d3.svg.axis().scale(scope.stateAxisScale).tickSize(-h).tickSubdivide(true);
+            // Add the x-axis.
+            var axis = d3.select(element[0]).append("svg")
+                .attr("class", "axis")
+                .attr("width", 1440)
+                .attr("height", 100)
+                .style("margin-left", 100)
+            axis.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + h + ")")
+                .call(xAxis);
+
+            scope.stateIcons = axis.append("g");
+
+            scope.$watch('nbrStates', function(newValue, oldValue) {
+                if (newValue > 0) {
+
+                    var dragstart = 0
+                    var drag = d3.behavior.drag()
+                        .origin(function() {
+                            var t = d3.select(this);
+                            return {
+                                x: t.attr("x"),
+                                y: t.attr("y")
+                            };
+                        })
+                        .on("dragstart", dragstarted)
+                        .on("drag", dragged)
+                        .on("dragend", dragended);
+
+                    scope.stateIcons.selectAll("circle")
+                        .data(scope.statesObject)
+                        .enter()
+                        .append("circle")
+                        .attr("cx", function(d) {
+                            return scope.stateAxisScale(d.time)
+                        })
+                        .attr("cy", 10)
+                        .attr("r", 3)
+                        .style("cursor", "pointer")
+                        .on("click", function(d) {
+                            scope.state(d.name);
+                            scope.stateIcons.selectAll("circle").style("fill", "black");
+                            d3.select(this).style("fill", "red");
+                            scope.$apply();
+                        })
+                        .call(drag);
+
+                    function dragstarted(d) {
+                        dragstart = parseInt(d3.select(this).attr("cx"));
+                        d3.event.sourceEvent.stopPropagation();
+                        d3.select(this).classed("dragging", true);
+                    }
+
+                    function dragged(d) {
+                        d3.select(this).attr("cx", dragstart + d3.event.x);
+                        d.time = invStateAxisScale(dragstart + d3.event.x);
+                        // console.log(scope.statesObject);
+                    }
+
+                    function dragended(d) {
+                        scope.state(d.name);
+                        scope.stateIcons.selectAll("circle").style("fill", "black");
+                        d3.select(this).style("fill", "red");
+                        d3.select(this).classed("dragging", false);
+
+                        scope.$apply();
+                    }
+
+                }
+            });
+
+        }
+    }
+});
+
+
 app.directive('importSvg', ['$rootScope', function($rootScope) {
     return {
         templateUrl: function(elem, attrs) {
@@ -37,7 +123,7 @@ app.directive('importSvg', ['$rootScope', function($rootScope) {
             var curConfig = {
                 canvasName: 'default',
                 canvas_expansion: 3,
-                dimensions: [800, 600],
+                dimensions: [800, 400],
                 initFill: {
                     color: 'FF0000', // solid red
                     opacity: 1
@@ -68,9 +154,9 @@ app.directive('importSvg', ['$rootScope', function($rootScope) {
 
             svgCanvas.customImport(svgImage);
             scope.$on("selected_in_canvas", function(event, args) {
-                console.log("selected_in_canvas")
-                selectedNode=scope.createTree(args[0])
-                //remove highlight from previous node
+                // console.log("selected_in_canvas")
+                selectedNode = scope.createTree(args[0])
+                    //remove highlight from previous node
                 if (scope.editTree.currentNode && scope.editTree.currentNode.selected) {
                     scope.editTree.currentNode.selected = undefined;
                 }
@@ -80,10 +166,10 @@ app.directive('importSvg', ['$rootScope', function($rootScope) {
 
                 //set currentNode
                 scope.editTree.currentNode = selectedNode;
-                console.log(args[0])
+                // console.log(args[0])
             })
             scope.$on("selected_in_tree", function(event, args) {
-                console.log("selected_in_tree")
+                // console.log("selected_in_tree")
                 svgCanvas.selectOnly([args]);
             })
             var gObject = d3.select(svgImage);
@@ -108,34 +194,49 @@ app.directive('animationResult', ['$rootScope', function($rootScope) {
             var svgImage = element[0].children[0];
             var container = element[0];
 
-            var savedStates = scope.savedStates;
-            var nbrStates = Object.keys(JSON.parse(savedStates)).length - 1;
-            var durations = scope.durations;
+            var savedStates = '';
+            var stateTimes = JSON.parse(attrs.stateTimes);
 
-            var svgObject = d3.select(svgImage);
-            var newSvg = [scope.createTree(svgObject[0][0])];
-            scope.loadFromObject(newSvg[0], savedStates);
+            function readTextFile(file) {
+                var rawFile = new XMLHttpRequest();
+                rawFile.open("GET", file, false);
+                rawFile.onreadystatechange = function() {
+                    if (rawFile.readyState === 4) {
+                        if (rawFile.status === 200 || rawFile.status == 0) {
 
-            var cumulatedDurations = [];
-            cumulatedDurations[0] = 0;
-            cumulatedDurations[1] = parseInt(durations[0]);
+                            var allText = rawFile.responseText;
 
-            for (var i = 1; i < durations.length; i++) {
-                cumulatedDurations[i + 1] = parseInt(durations[i]) + parseInt(cumulatedDurations[i]);
-            };
-            console.log(durations, cumulatedDurations,nbrStates)
+                            savedStates = allText;
+                            // console.log(allText);
+                            var nbrStates = Object.keys(JSON.parse(savedStates)).length - 1;
+
+                            var svgObject = d3.select(svgImage);
 
 
-            for (var i = 0; i < nbrStates-1; i++) {
-                setTimeout(function(j) {
-                    console.log(j+1, j + 2, parseInt(durations[j]))
-                    return function() {
-                        scope.animateState(newSvg[0], j+1, j+2, parseInt(durations[j]));
+                            var newSvg = [scope.createTree(svgObject[0][0])];
+                            scope.loadFromObject(newSvg[0], savedStates);
+
+                            svgObject.style("width", attrs.width);
+                            svgObject.style("height", attrs.height);
+
+
+                            // console.log(stateTimes, cumulatedstateTimes, nbrStates)
+
+
+                            for (var i = 0; i < nbrStates - 1; i++) {
+                                setTimeout(function(j) {
+                                    return function() {
+                                        scope.animateState(newSvg[0], j + 1, j + 2, stateTimes[i + 1] - stateTimes[i]);
+                                    }
+                                }(i), stateTimes[i]);
+                            };
+                        }
                     }
-                }(i), cumulatedDurations[i]);
+                }
+                rawFile.send(null);
             };
-
-
+            // console.log(attrs.animationObject);
+            readTextFile(attrs.animationObject);
         }
     }
 }]);

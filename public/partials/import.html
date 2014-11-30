@@ -1,7 +1,13 @@
-<div ng-controller="AnimationCtrl">
-    <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/collectData-01.svg" ng-click="" animation-result>
+<!--  <div ng-controller="AnimationCtrl">
+    <div style="display:inline-block;margin-right:7px;cursor:pointer" stateTimes="[1000, 1000, 1000, 1000, 1000]"  template-url="/animSvg/collectData-01.svg" width="200px" height="200px" animation-object="animJson/anim1.json" ng-click="" animation-result>
     </div>
-</div>
+
+    <div style="display:inline-block;margin-right:7px;cursor:pointer" stateTimes="[1000, 1000,500]"  template-url="/animSvg/insights2.svg" width="200px" height="200px" animation-object="animJson/insights2.json" ng-click="" animation-result>
+    </div>
+
+    <div style="display:inline-block;margin-right:7px;cursor:pointer" stateTimes="[1000, 1000,500]"  template-url="/animSvg/result3.svg" width="200px" height="200px" animation-object="animJson/result3.json" ng-click="" animation-result>
+    </div>
+</div>  -->
 
 <div class="import" apply-change>
 
@@ -10,41 +16,49 @@
 
     <div style="width:100%">
         <div style="width:70%;display:inline-block">
-            <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/collectData-01.svg" ng-click="" import-svg>
+            <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/twoCircles.svg" ng-click="" import-svg>
             </div>
         </div>
         <div style="width:20%;display:inline-block;vertical-align:top">
-            <div style="height:200px;overflow-y:scroll;width:300px">
+            <div style="height:150px;overflow-y:scroll;width:300px">
                 {{attributesName}}
                 <div ng-repeat="attr in editTree.currentNode.element.attributes">
-                    {{attr.name}} :
+                    {{attr.name}}
                     <input type="text" name="userName" placeholder="attr.value" ng-model="attr.value">
                 </div>
             </div>
-            <div style="height:200px;overflow-y:scroll;width:300px;vertical-align:top">
+            <div style="height:150px;overflow-y:scroll;width:300px;vertical-align:top">
                 <span><b>Selected Node</b> : {{editTree.currentNode.name}}</span>
                 <div data-angular-treeview="true" data-tree-id="editTree" data-tree-model="svg" data-node-id="name" data-node-label="name" data-node-children="children">
                 </div>
+            </div>
+            <div>
+                <textarea type="" name="" placeholder="" ng-model="svg[0].element.outerHTML" />
+                <textarea type="" name="" placeholder="" ng-model="savedObject" />
+                <div ng-click="saveStates()">save</div>
+                <div ng-click="loadFromObject(svg[0],savedObject)">load</div>
             </div>
         </div>
 
 
         <div style="width:70%;display:inline-block">
+            <!-- stateList:{{stateList}}
+            nbrStates:{{nbrStates}}
+            statseObject:{{statesObject}}
+            attributesName:{{attributesName}}
             <div ng-repeat="singleState in stateList">
-                <div ng-click="state($index + 1)">{{singleState}}</div>
-                <input type="" name="" placeholder="" ng-model="durations[$index]">
-            </div>
+                <div ng-click="state('attributes_'+($index + 1))">{{singleState}}</div>
+                <input type="" name="" placeholder="" ng-model="stateTimes[$index]">
+            </div> -->
             <div ng-click="createState()">addState</div>
             <!-- <div ng-click="saveStates()">save</div> -->
             <!-- <div ng-click="loadFromObject()">load</div> -->
             <div id="export" ng-click="export()">export</div>
             <!--  <input type="text" name="userName" placeholder="editTree.currentNode.element.style.fill" ng-model="editTree.currentNode.element.style.fill"> -->
+            <div states-axis></div>
         </div>
         <div style="width:20%;display:inline-block;vertical-align:top">
-            <textarea type="" name="" placeholder="" ng-model="svg[0].element.outerHTML" />
-            <textarea type="" name="" placeholder="" ng-model="savedObject" />
-            <div ng-click="saveStates()">save</div>
-            <div ng-click="loadFromObject(svg[0],savedObject)">load</div>
+
         </div>
     </div>
 
