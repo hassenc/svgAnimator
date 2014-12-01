@@ -37,9 +37,10 @@
                 <textarea type="" name="" placeholder="" ng-model="savedObject" />
                 <div ng-click="saveStates()">save</div>
                 <div ng-click="loadFromObject(svg[0],savedObject)">load</div>
+                
+        <input type="" name="" placeholder="" ng-model="currentTime">
             </div>
         </div>
-
 
         <div style="width:70%;display:inline-block">
             <!-- stateList:{{stateList}}
@@ -50,7 +51,6 @@
                 <div ng-click="state('attributes_'+($index + 1))">{{singleState}}</div>
                 <input type="" name="" placeholder="" ng-model="stateTimes[$index]">
             </div> -->
-            <div ng-click="createState()">addState</div>
             <!-- <div ng-click="saveStates()">save</div> -->
             <!-- <div ng-click="loadFromObject()">load</div> -->
             <div id="export" ng-click="export()">export</div>
