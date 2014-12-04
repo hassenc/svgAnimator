@@ -6689,11 +6689,11 @@ $.SvgCanvas = function(container, config, scope) {
 
         // Disable other elements
         $(elem).parentsUntil('#svgcontent').andSelf().siblings().each(function() {
-            var opac = this.getAttribute('opacity') || 1;
-            // Store the original's opacity
-            elData(this, 'orig_opac', opac);
-            this.setAttribute('opacity', opac * .33);
-            this.setAttribute('style', 'pointer-events: none');
+            // var opac = this.getAttribute('opacity') || 1;
+            // // Store the original's opacity
+            // elData(this, 'orig_opac', opac);
+            // this.setAttribute('opacity', opac * .33);
+            // this.setAttribute('style', 'pointer-events: none');
             disabled_elems.push(this);
         });
 
