@@ -5,6 +5,12 @@ app.directive('applyChange', function() {
         link: function(scope, element, attrs) {
             var animatedAttributes = [];
             var selectedState = {};
+            //save and delete
+            var selectedAttributes = [];
+
+            //save
+            var savedStateString = "";
+            var savedState = {};
 
             function findExistingState(currentNode, time) {
                 var selectedState = {};
@@ -17,6 +23,56 @@ app.directive('applyChange', function() {
                 };
                 return selectedState;
             }
+
+            document.addEventListener('keydown', function() {
+                return function(e) {
+                    var newEls = [];
+                    console.log(e)
+                        //delete
+                    if (e.keyCode === 46) {
+                        console.log("suppp");
+                        selectedAttributes = scope.editTree.currentNode.element["animatedAttributes"];
+
+                        console.log(scope.editTree.currentNode.element["animatedAttributes"]);
+                        for (var i = 0; i < selectedAttributes.length; i++) {
+                            if (Math.abs(scope.currentTime - selectedAttributes[i].time) < 100) {
+                                console.log("found it", i);
+                                scope.editTree.currentNode.element["animatedAttributes"].splice(i, 1);
+                                // scope.editTree.currentNode.element["animatedAttributes"] = scope.editTree.currentNode.element["animatedAttributes"].splice(i, 1);
+                            }
+                            // console.log(scope.editTree.currentNode.element["animatedAttributes"]);
+
+                        };
+                        console.log(scope.editTree.currentNode.element["animatedAttributes"]);
+                        scope.$apply()
+                    }
+                    //copy c
+                    if (e.keyCode === 67) {
+                        console.log("copy");
+                        selectedAttributes = scope.editTree.currentNode.element["animatedAttributes"];
+
+                        console.log(scope.editTree.currentNode.element["animatedAttributes"]);
+                        for (var i = 0; i < selectedAttributes.length; i++) {
+                            if (Math.abs(scope.currentTime - selectedAttributes[i].time) < 100) {
+                                savedStateString = JSON.stringify(selectedAttributes[i]);
+                                // scope.editTree.currentNode.element["animatedAttributes"] = scope.editTree.currentNode.element["animatedAttributes"].splice(i, 1);
+                            }
+                        };
+
+
+                    }
+                    //copy v
+                    if (e.keyCode === 86) {
+                        if (savedState) {
+                            console.log("paste");
+                            savedState = JSON.parse(savedStateString);
+                            savedState.time = scope.currentTime;
+                            scope.editTree.currentNode.element["animatedAttributes"].push(savedState);
+                            scope.$apply()
+                        }
+                    }
+                }
+            }(), true);
 
             // console.log(scope)
             scope.$watch('editTree.currentNode', function(newValue, oldValue) {
@@ -101,142 +157,114 @@ app.directive('statesAxis', function() {
 
                     var elementsStates = axis.append("g").attr("class", "elementsStates");
                     var statesGroups = elementsStates.selectAll("g").data(scope.elementsList).enter().append("g").attr("class", "aa");
-                    console.log(statesGroups)
+                    console.log(statesGroups);
+                    var bindedStates = {};
                     for (var i = 0; i < scope.elementsList.length; i++) {
-                        // console.log(scope.elementsList);
+                        var dragstart = 0
+                        var drag = d3.behavior.drag()
+                            .origin(function() {
+                                var t = d3.select(this);
+                                return {
+                                    x: t.attr("x"),
+                                    y: t.attr("y")
+                                };
+                            })
+                            .on("dragstart", dragstarted)
+                            .on("drag", dragged)
+                            .on("dragend", dragended);
+
+                        bindedStates['' + i + ''] = d3.select(statesGroups[0][i]).selectAll("circle")
+                            .data(function(d) {
+                                return d.element["animatedAttributes"];
+                            });
+
+
+
+                        bindedStates['' + i + ''].enter()
+                            .append("circle")
+                            .attr("cx", function(d) {
+                                console.log('nnn', d.time, scope.stateAxisScale(d.time) + axisXTranslate);
+                                return (scope.stateAxisScale(d.time) + axisXTranslate)
+                            })
+                            .attr("cy", function(d, x, j) {
+                                return (i + 1) * h;
+                            })
+                            .attr("r", 3)
+                            .style("cursor", "pointer")
+                            .on("click", function(d) {
+                                console.log('time state', d.time)
+                                scope.currentTime = d.time;
+                                //render this time
+                                scope.editTree.currentNode = scope.elementsList[i];
+                                statesGroups.selectAll("circle").style("fill", "black");
+                                d3.select(this).style("fill", "red");
+                            }).call(drag);
+
+
+
+
+                        function dragstarted(d) {
+                            dragstart = parseInt(d3.select(this).attr("cx"));
+                            d3.event.sourceEvent.stopPropagation();
+                            d3.select(this).classed("dragging", true);
+                        }
+
+                        function dragged(d) {
+                            d3.select(this).attr("cx", dragstart + d3.event.x);
+                            d.time = invStateAxisScale(dragstart + d3.event.x);
+                            scope.currentTime = d.time;
+                            scope.$apply();
+                            // console.log(scope.statesObject);
+                        }
+
+                        function dragended(d) {
+                            statesGroups.selectAll("circle").style("fill", "black");
+                            d3.select(this).style("fill", "red");
+                            d3.select(this).classed("dragging", false);
+
+                            scope.$apply();
+                        }
                         scope.$watch('elementsList[' + i + '].element["animatedAttributes"].length', function(i) {
                             return function(newValue, oldValue) {
-                                var dragstart = 0
-                                var drag = d3.behavior.drag()
-                                    .origin(function() {
-                                        var t = d3.select(this);
-                                        return {
-                                            x: t.attr("x"),
-                                            y: t.attr("y")
-                                        };
-                                    })
-                                    .on("dragstart", dragstarted)
-                                    .on("drag", dragged)
-                                    .on("dragend", dragended);
-                                var bindedStated = statesGroups.selectAll("circle")
-                                    .data(function(d) {
-                                        return d.element["animatedAttributes"]
-                                    });
 
-                                bindedStated.enter()
-                                    .append("circle")
+                                bindedStates['' + i + ''] = d3.select(statesGroups[0][i]).selectAll("circle")
+                                    .data(function(d) {
+                                        return d.element["animatedAttributes"];
+                                    })
+
+                                bindedStates['' + i + ''].exit().remove();
+
+                                bindedStates['' + i + ''].enter().append("circle")
                                     .attr("cx", function(d) {
                                         return (scope.stateAxisScale(d.time) + axisXTranslate)
                                     })
                                     .attr("cy", function(d, x, j) {
-                                        return (j + 1) * h
+                                        return (i + 1) * h;
                                     })
                                     .attr("r", 3)
                                     .style("cursor", "pointer")
-                                    .on("click", function(d, x, j) {
-                                        console.log('time state', d.time)
+                                    .on("click", function(d) {
+                                        console.log('time state', 'aaaaaaaaaaaaaa', d.time)
                                         scope.currentTime = d.time;
                                         //render this time
-                                        scope.editTree.currentNode = scope.elementsList[j];
+                                        scope.editTree.currentNode = scope.elementsList[i];
                                         statesGroups.selectAll("circle").style("fill", "black");
                                         d3.select(this).style("fill", "red");
-                                        scope.$apply();
-                                        // console.log(d,x,scope.elementsList[i].element["animatedAttributes"],i)
-                                        // document.addEventListener('keydown', function(i) {
-                                        //     return function(e) {
-                                        //         if (e.keyCode === 46) {
-                                        //             console.log(x,i)
-                                        //             console.log(scope.elementsList[i].element["animatedAttributes"])
-                                        //             scope.elementsList[i].element["animatedAttributes"] = scope.elementsList[i].element["animatedAttributes"].splice(x, 1);
-                                        //             console.log(scope.elementsList[i].element["animatedAttributes"])
-                                        //         }
-                                        //     }
-                                        // }(i), true);
                                     }).call(drag);
 
-                                bindedStated.exit().remove();
 
-                                function dragstarted(d) {
-                                    dragstart = parseInt(d3.select(this).attr("cx"));
-                                    d3.event.sourceEvent.stopPropagation();
-                                    d3.select(this).classed("dragging", true);
-                                }
+                                bindedStates['' + i + ''] = d3.select(statesGroups[0][i]).selectAll("circle")
+                                    .data(function(d) {
+                                        return d.element["animatedAttributes"];
+                                    })
+                                    .attr("cx", function(d) {
+                                        return (scope.stateAxisScale(d.time) + axisXTranslate)
+                                    });
 
-                                function dragged(d) {
-                                    d3.select(this).attr("cx", dragstart + d3.event.x);
-                                    d.time = invStateAxisScale(dragstart + d3.event.x);
-                                    scope.currentTime = d.time;
-                                    scope.$apply();
-                                    // console.log(scope.statesObject);
-                                }
 
-                                function dragended(d) {
-                                    statesGroups.selectAll("circle").style("fill", "black");
-                                    d3.select(this).style("fill", "red");
-                                    d3.select(this).classed("dragging", false);
-
-                                    scope.$apply();
-                                }
                             }
                         }(i));
                     };
-
-                }
-            });
-            scope.$watch('nbrStates', function(newValue, oldValue) {
-                if (newValue > 0) {
-
-                    var dragstart = 0
-                    var drag = d3.behavior.drag()
-                        .origin(function() {
-                            var t = d3.select(this);
-                            return {
-                                x: t.attr("x"),
-                                y: t.attr("y")
-                            };
-                        })
-                        .on("dragstart", dragstarted)
-                        .on("drag", dragged)
-                        .on("dragend", dragended);
-
-                    stateIcons.selectAll("circle")
-                        .data(scope.statesObject)
-                        .enter()
-                        .append("circle")
-                        .attr("cx", function(d) {
-                            return scope.stateAxisScale(d.time)
-                        })
-                        .attr("cy", 10)
-                        .attr("r", 3)
-                        .style("cursor", "pointer")
-                        .on("click", function(d) {
-                            scope.state(d.name);
-                            stateIcons.selectAll("circle").style("fill", "black");
-                            d3.select(this).style("fill", "red");
-                            scope.$apply();
-                        })
-                        .call(drag);
-
-                    function dragstarted(d) {
-                        dragstart = parseInt(d3.select(this).attr("cx"));
-                        d3.event.sourceEvent.stopPropagation();
-                        d3.select(this).classed("dragging", true);
-                    }
-
-                    function dragged(d) {
-                        d3.select(this).attr("cx", dragstart + d3.event.x);
-                        d.time = invStateAxisScale(dragstart + d3.event.x);
-                        // console.log(scope.statesObject);
-                    }
-
-                    function dragended(d) {
-                        scope.state(d.name);
-                        stateIcons.selectAll("circle").style("fill", "black");
-                        d3.select(this).style("fill", "red");
-                        d3.select(this).classed("dragging", false);
-
-                        scope.$apply();
-                    }
 
                 }
             });
@@ -355,9 +383,14 @@ app.directive('animationResult', ['$rootScope', function($rootScope) {
                             svgObject.style("width", attrs.width);
                             svgObject.style("height", attrs.height);
 
-
                             scope.loadFromObject(newSvg[0], savedStates);
-                            scope.animateGlobal(newSvg[0]);
+
+                            function repeat() {
+                              scope.animateGlobal(newSvg[0]);
+                            }
+
+                            repeat();
+                            setInterval(repeat, 5300);
                         }
                     }
                 }
