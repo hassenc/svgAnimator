@@ -1,18 +1,18 @@
 <svg id="svgcontent" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="183.783" height="148.649" viewBox="0 0 183.783 148.649" overflow="visible">
     <g style="pointer-events:all">
         <title style="pointer-events:inherit">Layer 1</title>
-        <circle fill="#A7C8EB" cx="45.676" cy="82.531" r="6.081" style="pointer-events:inherit" id="svg_1"></circle>
-        <circle fill="#A7C8EB" cx="61.609" cy="66.597" r="9.852" style="pointer-events:inherit" id="svg_2"></circle>
-        <circle fill="#A7C8EB" cx="66.535" cy="87.457" r="4.926" style="pointer-events:inherit" id="svg_3"></circle>
-        <circle fill="#A7C8EB" cx="45.676" cy="48.637" r="6.081" style="pointer-events:inherit" id="svg_4"></circle>
-        <circle fill="#A7C8EB" cx="34.189" cy="69.529" r="5.406" style="pointer-events:inherit" id="svg_5"></circle>
+        <circle fill="#a7c8eb" cx="123.88354716981132" cy="83.48383018867925" r="6.080999851226807" id="svg_1" style="pointer-events:inherit"></circle>
+        <circle fill="#a7c8eb" cx="126.0901320754717" cy="64.597" r="9.85200023651123" id="svg_2" style="pointer-events:inherit"></circle>
+        <circle fill="#a7c8eb" cx="113.731261682243" cy="87.457" r="4.926000111624459" id="svg_3" style="pointer-events:inherit"></circle>
+        <circle fill="#a7c8eb" cx="94.35781818181817" cy="48.14710101010101" r="6.080999851226807" id="svg_4" style="pointer-events:inherit"></circle>
+        <circle fill="#a7c8eb" cx="62.77390566037735" cy="72.38749056603773" r="5.4060001308513135" id="svg_5" style="pointer-events:inherit"></circle>
         <circle fill="#F8DB7D" cx="107.892" cy="74.531" r="6.081" style="pointer-events:inherit" id="svg_6"></circle>
-        <circle fill="#F8DB7D" cx="114.986" cy="89.282" r="7.095" style="pointer-events:inherit" id="svg_7"></circle>
+        <circle fill="#f8db7d" cx="91.14256565656567" cy="91.34260606060606" r="7.09499979019165" id="svg_7" style="pointer-events:inherit"></circle>
         <circle fill="#F8DB7D" cx="125.459" cy="77.91" r="3.378" style="pointer-events:inherit" id="svg_8"></circle>
-        <circle fill="#F8DB7D" cx="134.919" cy="102.458" r="6.081" style="pointer-events:inherit" id="svg_9"></circle>
-        <circle fill="#F8DB7D" cx="141" cy="88.268" r="6.081" style="pointer-events:inherit" id="svg_10"></circle>
-        <circle fill="#F8DB7D" cx="153.5" cy="102.12" r="6.419" style="pointer-events:inherit" id="svg_11"></circle>
-        <circle fill="#F8DB7D" cx="117.608" cy="107.173" r="4.877" style="pointer-events:inherit" id="svg_12"></circle>
+        <circle fill="#f8db7d" cx="71.94730188679246" cy="101.50516981132076" r="6.080999851226807" id="svg_9" style="pointer-events:inherit"></circle>
+        <circle fill="#f8db7d" cx="95.1574074074074" cy="90.13837037037037" r="6.080999851226807" id="svg_10" style="pointer-events:inherit"></circle>
+        <circle fill="#f8db7d" cx="44.38461538461537" cy="100.20653846153847" r="6.419000148773193" id="svg_11" style="pointer-events:inherit"></circle>
+        <circle fill="#f8db7d" cx="100.01204040404042" cy="107.68310101010101" r="4.876999855041504" id="svg_12" style="pointer-events:inherit"></circle>
         <line fill="none" stroke="#4C4C4C" stroke-width="2" stroke-miterlimit="10" x1="19.811" y1="23.108" x2="19.811" y2="135.108" style="pointer-events:inherit" id="svg_13"></line>
         <line fill="none" stroke="#4C4C4C" stroke-width="2" stroke-miterlimit="10" x1="19.811" y1="136.108" x2="169.811" y2="136.108" style="pointer-events:inherit" id="svg_14"></line>
     </g>

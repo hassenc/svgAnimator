@@ -1,14 +1,14 @@
  <div ng-controller="AnimationCtrl">
    <!--  <div style="display:inline-block;margin-right:7px;cursor:pointer" template-url="/animSvg/superSenti1.svg" width="400px" height="400px" animation-object="animJson/superSenti1.json" ng-click="" animation-result>
     </div> -->
-<!-- 
-    <div style="display:inline-block;margin-right:7px;cursor:pointer" stateTimes="[1000, 1000, 1000, 1000, 1000]"  template-url="/animSvg/collectData-01.svg" width="200px" height="200px" animation-object="animJson/anim1.json" ng-click="" animation-result>
-    </div> -->
 
-   <!--  <div style="display:inline-block;margin-right:7px;cursor:pointer" stateTimes="[1000, 1000,500]"  template-url="/animSvg/insights2.svg" width="200px" height="200px" animation-object="animJson/insights2.json" ng-click="" animation-result>
+<!--     <div style="display:inline-block;margin-right:7px;cursor:pointer"  template-url="/animSvg/collectData-01.svg" width="200px" height="200px" animation-object="animJson/anim1.json" ng-click="" animation-result>
+    </div>
+ -->
+<!--     <div style="display:inline-block;margin-right:7px;cursor:pointer" template-url="/animSvg/insights2.svg" width="200px" height="200px" animation-object="animJson/insights2.json" ng-click="" animation-result>
     </div>
 
-    <div style="display:inline-block;margin-right:7px;cursor:pointer" stateTimes="[1000, 1000,500]"  template-url="/animSvg/result3.svg" width="200px" height="200px" animation-object="animJson/result3.json" ng-click="" animation-result>
+    <div style="display:inline-block;margin-right:7px;cursor:pointer"  template-url="/animSvg/result3.svg" width="200px" height="200px" animation-object="animJson/result3.json" ng-click="" animation-result>
     </div> -->
 </div> 
 
@@ -19,10 +19,10 @@
 
     <div style="width:100%">
         <div style="width:900px;height:450px;overflow:auto;display:inline-block;right:0">
-            <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/sentimanSuperman.svg" ng-click="" import-svg>
+            <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/rotationtest.svg" ng-click="" import-svg>
             </div>
         </div>
-        <div style="width:300px;height:400px;float:right;overflow-y:scroll;">
+        <div style="">
             <div style="">
                 {{attributesName}}
                 <div ng-repeat="attr in editTree.currentNode.element.attributes">
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <div style="width:100%;height:200px;overflow:auto;position:absolute;bottom:0">
+        <div style="">
             <!-- stateList:{{stateList}}
             nbrStates:{{nbrStates}}
             statseObject:{{statesObject}}
@@ -62,7 +62,7 @@
             <!--  <input type="text" name="userName" placeholder="editTree.currentNode.element.style.fill" ng-model="editTree.currentNode.element.style.fill"> -->
             <div states-axis></div>
         </div>
-        <div style="width:20%;display:inline-block;vertical-align:top">
+        <div style="">
 
         </div>
     </div>
