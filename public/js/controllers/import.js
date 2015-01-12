@@ -159,22 +159,40 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
 
             // }
             // console.log(copyAttributes1,copyAttributes2);
+
+            var t1 = a.element["animatedAttributes"][state1].attributes.transform;
+            var t2 = a.element["animatedAttributes"][state2].attributes.transform;
+            delete a.element["animatedAttributes"][state1].attributes.transform;
+            delete a.element["animatedAttributes"][state2].attributes.transform;
+            console.log(t1,t2)
             var ettrs1 = a.element["animatedAttributes"][state1].attributes;
             var ettrs2 = a.element["animatedAttributes"][state2].attributes;
             var keys = Object.keys(ettrs1);
-            for (var i = 0; i < keys.length; i++) {
-                console.log(ettrs2[keys[i]])
+            // for (var i = 0; i < keys.length; i++) {
+            //     console.log(ettrs2[keys[i]])
                     
-                d3.select(a.element).transition()
-                    .duration(duration)
-                    .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
-
+            //     d3.select(a.element).transition()
+            //         .duration(duration)
+            //         .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
+            // };
                 d3.select(a.element)
                     .attr(ettrs1)
                     .transition()
                     .duration(duration)
-                    .attr(ettrs2);
-            };
+                    .attr(ettrs2)
+                    .attrTween("transform",function() { if (t1 && t2) {return d3.interpolate(t1, t2)} });
+            
+                    
+                // d3.select(a.element).transition()
+                //     .duration(duration)
+                //     .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
+
+                // d3.select(a.element)
+                //     .attr({"fill":"red","opacity":0.5})
+                //     .transition()
+                //     .duration(duration)
+                //     .attr({"fill":"blue","opacity":1})
+            
             
 
 
