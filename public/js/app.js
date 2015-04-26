@@ -388,9 +388,12 @@ app.directive('animationResult', ['$rootScope', function($rootScope) {
                             function repeat() {
                               scope.animateGlobal(newSvg[0]);
                             }
+                            // container.addEventListener("click",function(){
 
                             repeat();
-                            setInterval(repeat, 5300);
+                            
+                            setInterval(repeat, 5000);
+                            // })
                         }
                     }
                 }

@@ -1,10 +1,12 @@
  <div ng-controller="AnimationCtrl">
-   <!--  <div style="display:inline-block;margin-right:7px;cursor:pointer" template-url="/animSvg/superSenti1.svg" width="400px" height="400px" animation-object="animJson/superSenti1.json" ng-click="" animation-result>
+    <div style="display:inline-block;margin-right:7px;cursor:pointer" template-url="/animSvg/monsters1.svg" width="250px" height="250px" animation-object="animJson/monsters1.json" ng-click="" monster-init>
+    </div>
+       <!--  <div style="display:inline-block;margin-right:7px;cursor:pointer" template-url="/animSvg/superSenti1.svg" width="400px" height="400px" animation-object="animJson/superSenti1.json" ng-click="" animation-result>
     </div> -->
 
-<!--     <div style="display:inline-block;margin-right:7px;cursor:pointer"  template-url="/animSvg/collectData-01.svg" width="200px" height="200px" animation-object="animJson/anim1.json" ng-click="" animation-result>
-    </div>
- -->
+<!--     <div style="display:inline-block;margin-right:7px;cursor:pointer"  template-url="/animSvg/dialogBoxDemo1.svg" width="400px" height="400px" animation-object="animJson/dialogBoxDemo1.json" ng-click="" animation-result>
+    </div> -->
+
 <!--     <div style="display:inline-block;margin-right:7px;cursor:pointer" template-url="/animSvg/insights2.svg" width="200px" height="200px" animation-object="animJson/insights2.json" ng-click="" animation-result>
     </div>
 
@@ -19,7 +21,7 @@
 
     <div style="width:100%">
         <div style="width:900px;height:450px;overflow:auto;display:inline-block;right:0">
-            <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/rotationtest.svg" ng-click="" import-svg>
+            <div style="display:inline-block;margin-right:7px;cursor:pointer;" template-url="/img/monsters-01.svg" ng-click="" import-svg>
             </div>
         </div>
         <div style="">
@@ -30,8 +32,9 @@
                     <input type="text" name="userName" placeholder="attr.value" ng-model="attr.value">
                 </div>
             </div>
-            <div style="">
+            
                 <span><b>Selected Node</b> : {{editTree.currentNode.name}}</span>
+            <div style="height:200px;overflow-y:scroll;overflow-y:auto">
                 <div data-angular-treeview="true" data-tree-id="editTree" data-tree-model="svg" data-node-id="name" data-node-label="name" data-node-children="children">
                 </div>
             </div>

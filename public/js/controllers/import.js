@@ -164,7 +164,6 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
             var t2 = a.element["animatedAttributes"][state2].attributes.transform;
             delete a.element["animatedAttributes"][state1].attributes.transform;
             delete a.element["animatedAttributes"][state2].attributes.transform;
-            console.log(t1,t2)
             var ettrs1 = a.element["animatedAttributes"][state1].attributes;
             var ettrs2 = a.element["animatedAttributes"][state2].attributes;
             var keys = Object.keys(ettrs1);
@@ -182,7 +181,8 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
                     .attr(ettrs2)
                     .attrTween("transform",function() { if (t1 && t2) {return d3.interpolate(t1, t2)} });
             
-                    
+             a.element["animatedAttributes"][state2].attributes.transform =t2;       
+             a.element["animatedAttributes"][state1].attributes.transform =t1;  
                 // d3.select(a.element).transition()
                 //     .duration(duration)
                 //     .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});

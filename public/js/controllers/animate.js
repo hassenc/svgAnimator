@@ -15,9 +15,74 @@ app.controller('AnimationCtrl', ['$scope', 'Airport',
 
 
         $scope.animateElement = function(a, state1, state2, duration) {
-            //faut ptetr trier !!!!!!
-            //TODO trier d'abord
-            d3.select(a.element).attr(a.element["animatedAttributes"][state1].attributes).transition().duration(duration).attr(a.element["animatedAttributes"][state2].attributes);
+
+
+            // var copyAttributes1 =JSON.parse(JSON.stringify(a.element["animatedAttributes"][state1].attributes));
+            // var copyAttributes2 =JSON.parse(JSON.stringify(a.element["animatedAttributes"][state2].attributes));
+
+            // if (('transform' in a.element["animatedAttributes"][state1].attributes) && ('transform' in a.element["animatedAttributes"][state2].attributes)){
+            //     delete copyAttributes1["transform"];
+            //     delete copyAttributes2["transform"];
+            // }
+
+            // d3.select(a.element).attr(copyAttributes1).transition().duration(duration).attr(copyAttributes2);
+
+            // //faut ptetr trier !!!!!!
+            // //TODO trier d'abord
+            // if (('transform' in a.element["animatedAttributes"][state1].attributes) && ('transform' in a.element["animatedAttributes"][state2].attributes)){
+            //     // console.log(state1,state2,a.element["animatedAttributes"][state1].attributes["transform"],a.element["animatedAttributes"][state2].attributes["transform"]);
+            //     // delete copyAttributes1["transform"];
+            //     // delete copyAttributes2["transform"];
+            // console.log("xxx");
+            //     //WARNING if other attributes on g will not work !!!!!!!!!!!!!!
+            //     d3.select(a.element).transition()
+            //         .duration(duration)
+            //         .attrTween("transform", tween);
+
+            //     function tween() {
+            //         return d3.interpolateString(a.element["animatedAttributes"][state1].attributes["transform"], a.element["animatedAttributes"][state2].attributes["transform"]);
+            //     }
+
+            // }
+            // console.log(copyAttributes1,copyAttributes2);
+
+            var t1 = a.element["animatedAttributes"][state1].attributes.transform;
+            var t2 = a.element["animatedAttributes"][state2].attributes.transform;
+            delete a.element["animatedAttributes"][state1].attributes.transform;
+            delete a.element["animatedAttributes"][state2].attributes.transform;
+            var ettrs1 = a.element["animatedAttributes"][state1].attributes;
+            var ettrs2 = a.element["animatedAttributes"][state2].attributes;
+            var keys = Object.keys(ettrs1);
+            // for (var i = 0; i < keys.length; i++) {
+            //     console.log(ettrs2[keys[i]])
+                    
+            //     d3.select(a.element).transition()
+            //         .duration(duration)
+            //         .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
+            // };
+                d3.select(a.element)
+                    .attr(ettrs1)
+                    .transition()
+                    .duration(duration)
+                    .ease("linear")
+                    .attr(ettrs2)
+                    .attrTween("transform",function() { if (t1 && t2) {return d3.interpolate(t1, t2)} });
+            
+             a.element["animatedAttributes"][state2].attributes.transform =t2;       
+             a.element["animatedAttributes"][state1].attributes.transform =t1;       
+                // d3.select(a.element).transition()
+                //     .duration(duration)
+                //     .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
+
+                // d3.select(a.element)
+                //     .attr({"fill":"red","opacity":0.5})
+                //     .transition()
+                //     .duration(duration)
+                //     .attr({"fill":"blue","opacity":1})
+            
+            
+
+
         };
 
         $scope.animateGlobal = function(parent) {
