@@ -2,23 +2,23 @@
     <g style="pointer-events:all">
         <title style="pointer-events:inherit">Layer 1</title>
         <rect x="35.811" y="52" fill="#FFFFFF" width="117" height="13" style="pointer-events:inherit" id="svg_1"></rect>
-        <rect x="14.810999883048716" y="33.99999376591369" fill="#A7C8EB" width="177.00000989814893" height="185.20000503174577" id="svg_2" stroke="null"></rect>
-        <path fill="none" stroke="#FFFFFF" stroke-miterlimit="10" d="M75.156,100.571L66.825,103.973L54.474,109.021L59.749,96.773L63.305,88.517C56.201,85.845 47.88,87.321 42.105,92.988C34.171,100.773 34.051,113.517 41.836,121.45S62.364,129.505 70.298,121.72C76.084,116.043 77.714,107.732 75.156,100.571z" style="pointer-events:inherit" id="svg_3"></path>
-        <path fill="#FFFFFF" d="M61.547000885009766,102.0199966430664 L76.8839338810094,95.75161566155111 L87.22899690755276,91.52716053592667 C86.04933230634106,88.22284342029343 84.15068790903115,85.11348862198247 81.53182264153929,82.44620251752895 C78.90054663321007,79.76524565045838 75.81354064225434,77.80450965356977 72.51418782295605,76.56151237869562 L68.0985030761085,86.81221587948312 L61.547000885009766,102.0199966430664 z" id="svg_4" stroke="null"></path>
-        <rect x="108.81100063265279" y="90" fill="#FFFFFF" width="62.999998569488525" height="6.000000059604645" id="svg_5" stroke="null"></rect>
-        <rect x="108.81100063265279" y="102" fill="#FFFFFF" width="62.999998569488525" height="6.000000059604645" id="svg_6" stroke="null"></rect>
-        <rect x="108.81100069016647" y="115" fill="#FFFFFF" width="63.999994732084815" height="6.000000059604645" id="svg_7" stroke="null"></rect>
-        <g display="block" id="svg_8">
-            <rect x="73.811" y="154" fill="#FFFFFF" width="5" height="36" id="svg_9"></rect>
-            <rect x="80.811" y="163" fill="#FFFFFF" width="5" height="27" id="svg_10"></rect>
-            <rect x="87.811" y="154" fill="#FFFFFF" width="6" height="36" id="svg_11"></rect>
-            <rect x="95.811" y="163" fill="#FFFFFF" width="5" height="27" id="svg_12"></rect>
-            <rect x="102.811" y="170" fill="#FFFFFF" width="5" height="20" id="svg_13"></rect>
-            <rect x="109.811" y="174" fill="#FFFFFF" width="5" height="16" id="svg_14"></rect>
-            <rect x="116.811" y="170" fill="#FFFFFF" width="5" height="20" id="svg_15"></rect>
-            <rect x="123.811" y="174" fill="#FFFFFF" width="5" height="16" id="svg_16"></rect>
-            <rect x="131.811" y="180" fill="#FFFFFF" width="5" height="10" id="svg_17"></rect>
-            <rect x="66.811" y="180" fill="#FFFFFF" width="5" height="10" id="svg_18"></rect>
+        <rect x="41.74049252050729" y="58" fill="#a7c8eb" width="105.25640579756882" height="135.51428534961934" id="svg_2" stroke="null"></rect>
+        <path fill="none" stroke="#FFFFFF" stroke-miterlimit="10" d="M106.91667938232422,151.5709991455078 L98.58567810058594,154.97299194335938 L86.23468017578125,160.02101135253906 L91.50968170166016,147.77301025390625 L95.06568145751953,139.51699829101562 C87.96168518066406,136.84500122070312 79.64068603515625,138.3209991455078 73.86568450927734,143.98800659179688 C65.93168640136719,151.77301025390625 65.81168365478516,164.51699829101562 73.5966796875,172.4499969482422 S94.12467956542969,180.5050048828125 102.05867767333984,172.72000122070312 C107.84468078613281,167.04299926757812 109.47467803955078,158.73199462890625 106.91667938232422,151.5709991455078 z" id="svg_3"></path>
+        <path fill="#FFFFFF" d="M91.2969970703125,155.0286102294922 L103.64800262451172,149.98062133789062 L111.97899627685547,146.57862854003906 C111.02899932861328,143.91761779785156 109.5,141.4136199951172 107.39099884033203,139.265625 C105.27200317382812,137.1066131591797 102.78600311279297,135.52761840820312 100.12899780273438,134.52662658691406 L96.572998046875,142.78163146972656 L91.2969970703125,155.0286102294922 z" id="svg_4"></path>
+        <rect x="67.811" y="91" fill="#FFFFFF" width="52" height="7" id="svg_5"></rect>
+        <rect x="66.84085074626867" y="103.01492537313433" fill="#ffffff" width="52" height="7" id="svg_6"></rect>
+        <rect x="66.84085074626867" y="115" fill="#ffffff" width="52" height="7" id="svg_7"></rect>
+        <g display="none" style="pointer-events:inherit" id="svg_8">
+            <rect x="67.811" y="92" fill="#FFFFFF" width="5" height="36" style="pointer-events:inherit" id="svg_9"></rect>
+            <rect x="74.811" y="101" fill="#FFFFFF" width="5" height="27" style="pointer-events:inherit" id="svg_10"></rect>
+            <rect x="81.811" y="92" fill="#FFFFFF" width="6" height="36" style="pointer-events:inherit" id="svg_11"></rect>
+            <rect x="89.811" y="101" fill="#FFFFFF" width="5" height="27" style="pointer-events:inherit" id="svg_12"></rect>
+            <rect x="96.811" y="108" fill="#FFFFFF" width="5" height="20" style="pointer-events:inherit" id="svg_13"></rect>
+            <rect x="103.811" y="112" fill="#FFFFFF" width="5" height="16" style="pointer-events:inherit" id="svg_14"></rect>
+            <rect x="110.811" y="108" fill="#FFFFFF" width="5" height="20" style="pointer-events:inherit" id="svg_15"></rect>
+            <rect x="117.811" y="112" fill="#FFFFFF" width="5" height="16" style="pointer-events:inherit" id="svg_16"></rect>
+            <rect x="125.811" y="118" fill="#FFFFFF" width="5" height="10" style="pointer-events:inherit" id="svg_17"></rect>
+            <rect x="60.811" y="118" fill="#FFFFFF" width="5" height="10" style="pointer-events:inherit" id="svg_18"></rect>
         </g>
     </g>
 </svg>

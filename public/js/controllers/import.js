@@ -2,63 +2,48 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
     function($scope, Airport) {
 
         $scope.svg = {};
-        $scope.stateList = [];
-        $scope.statesObject = [];
+        $scope.savedObject = {};
 
-        $scope.stateIcons;
+        $scope.elementsList = [];
+        $scope.manualChange = true; //to avoid state creation on tween rendering
+
         $scope.stateAxisScale;
 
-        $scope.attributesName = "attributes_1";
-        $scope.previousAttributesName = "attributes_1";
-        $scope.stateTimes = [];
-
-        //state change
-        //runs apply attributes
-        $scope.state = function(stateName) {
-            $scope.previousAttributesName = $scope.attributesName;
-            $scope.attributesName = stateName;
-            // console.log($scope.attributesName,stateName)
-            $scope.applyNewAttributes($scope.svg[0]);
-            // console.log("changed state to", stateName);
-        };
 
 
-        $scope.deleteState = function(stateName) {
-            $scope.statesObject[stateName].remove;
-            $scope.nbrStates = Object.keys($scope.statesObject).length;
-        };
+        $scope.currentTime = 0;
 
 
-        //create a new State
-        //initialise the attributes_n to .attributes
-        $scope.createState = function() {
-            $scope.stateTimes.push(1000 * $scope.stateList.length);
-            $scope.stateList.push("attributes_" + ($scope.stateList.length + 1));
+
+        $scope.initElementStates = function() {
+            var newState;
             var parent = $scope.svg[0];
-            var newStateNumber = $scope.stateList.length;
-            // console.log("add","attributes_" + newStateNumber);
-            $scope.statesObject.push({
-                "name": "attributes_" + newStateNumber,
-                "time": 10000
-            });
 
-            $scope.nbrStates = $scope.statesObject.length;
-
-
-            function _createState(a, stateNumber) {
+            function _initElementStates(a) {
                 //WARNING CAN DELETE ATTRIBUTES ?
-                a.element["attributes_" + stateNumber] = {};
+
+                // console.log(a)
+                newState = {
+                    "time": 0,
+                    "attributes": {}
+                };
+                a.element["animatedAttributes"] = [];
+
                 for (var i = 0; i < a.element.attributes.length; i++) {
                     if (a.element.attributes[i].prefix === null) {
-                        a.element["attributes_" + stateNumber][a.element.attributes[i].name] = a.element.attributes[i].value;
+                        newState["attributes"][a.element.attributes[i].name] = a.element.attributes[i].value;
                     }
                 };
+                a.element["animatedAttributes"].push(newState);
+
+                $scope.elementsList.push(a);
+
                 for (var i = 0; i < a.children.length; i++) {
-                    _createState(a.children[i], stateNumber);
+                    _initElementStates(a.children[i]);
                 };
             }
 
-            _createState(parent, newStateNumber);
+            _initElementStates(parent);
         };
 
         //  //create a new State Icon
@@ -69,16 +54,48 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
         //         .attr("r",3);
         // };
 
+        $scope.applyTimeAttribues = function(time) {
+            var parent = $scope.svg[0];
+            //maybe not a very good solution wait 500ms before being able to create states again
+            setTimeout(function() {
+                $scope.manualChange = true;
+            }, 500);
 
-        //apply new attributes with d3
-        $scope.applyNewAttributes = function(a) {
-            // el.element.attributes={}
-            var el = a;
-            d3.select(el.element).attr(el.element[$scope.attributesName]);
-            for (var i = 0; i < el.children.length; i++) {
-                $scope.applyNewAttributes(el.children[i]);
-            };
+            function _applyTimeAttribues(a) {
+
+                $scope.manualChange = false;
+                var q = 0;
+                var interpolatedObject = {};
+
+                statesObject = a.element["animatedAttributes"];
+                sortedStatesObject = statesObject.sort(function(a, b) {
+                    return a.time - b.time;
+                });
+                a.element["animatedAttributes"] = sortedStatesObject;
+
+                if (sortedStatesObject[sortedStatesObject.length - 1].time <= time) {
+                    d3.select(a.element).attr(a.element["animatedAttributes"][sortedStatesObject.length - 1].attributes);
+
+                } else {
+                    for (var i = 0; i < sortedStatesObject.length - 1; i++) {
+                        if ((sortedStatesObject[i].time <= time) && (time < sortedStatesObject[i + 1].time)) {
+                            // console.log(i,time,sortedStatesObject[i + 1].time,sortedStatesObject[i].time )
+                            q = (time - sortedStatesObject[i].time) / (sortedStatesObject[i + 1].time - sortedStatesObject[i].time);
+                            interpolatedObject = d3.interpolateObject(a.element["animatedAttributes"][i].attributes, a.element["animatedAttributes"][i + 1].attributes)(q);
+                            d3.select(a.element).attr(interpolatedObject);
+                        }
+                    };
+                }
+                for (var i = 0; i < a.children.length; i++) {
+                    _applyTimeAttribues(a.children[i]);
+                };
+            }
+
+            _applyTimeAttribues(parent);
         };
+
+
+
 
 
         $scope.createTree = function(a) {
@@ -96,9 +113,6 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
         //creates new dom svg, saves states, creates new tree, loads the attributes into new element
         $scope.export = function(a) {
             var savedStates = $scope.saveStates();
-            // console.log(savedStates);
-            var nbrStates = Object.keys(JSON.parse(savedStates)).length - 1;
-            var stateTimes = $scope.stateTimes;
 
             // if (!document.getElementById("export")) {
             document.getElementById("export").insertAdjacentHTML('beforeend', $scope.svg[0].element.outerHTML);
@@ -109,45 +123,103 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
             var newSvg = [$scope.createTree(svgObject[0][0])];
             $scope.loadFromObject(newSvg[0], savedStates);
 
-
-
-            var statesObject = $scope.statesObject;
-            var sortedStatesObject = $scope.statesObject.sort(function(a, b) {
-                    return a.time - b.time;
-                });
-            // console.log(statesObject,sortedStatesObject)
-
-
-
-            function getStateTime(name) {
-                for (var i = 0; i < statesObject.length; i++) {
-                    if (statesObject[i].name === name) {
-                        return statesObject[i].time
-                    }
-                }
-                return false;
-            };
-
-            for (var i = 0; i < sortedStatesObject.length - 1; i++) {
-                setTimeout(function(j) {
-                    return function() {
-                        $scope.animateState(newSvg[0], j + 1, j + 2, getStateTime(sortedStatesObject[j + 1].name) - getStateTime(sortedStatesObject[j].name));
-                    }
-                }(i), getStateTime(sortedStatesObject[i].name));
-            }
+            $scope.animateGlobal(newSvg[0]);
         };
 
 
 
+        $scope.animateElement = function(a, state1, state2, duration) {
 
-        $scope.animateState = function(a, state1, state2, duration) {
-            var el = a;
-            // console.log(state1, state2, duration);
-            // console.log(el.element[$scope.previousAttributesName],el.element["attributes_" + stateNumber]);
-            d3.select(el.element).attr(el.element["attributes_" + state1]).transition().duration(duration).attr(el.element["attributes_" + state2]);
-            for (var i = 0; i < el.children.length; i++) {
-                $scope.animateState(el.children[i], state1, state2, duration);
+
+            // var copyAttributes1 =JSON.parse(JSON.stringify(a.element["animatedAttributes"][state1].attributes));
+            // var copyAttributes2 =JSON.parse(JSON.stringify(a.element["animatedAttributes"][state2].attributes));
+
+            // if (('transform' in a.element["animatedAttributes"][state1].attributes) && ('transform' in a.element["animatedAttributes"][state2].attributes)){
+            //     delete copyAttributes1["transform"];
+            //     delete copyAttributes2["transform"];
+            // }
+
+            // d3.select(a.element).attr(copyAttributes1).transition().duration(duration).attr(copyAttributes2);
+
+            // //faut ptetr trier !!!!!!
+            // //TODO trier d'abord
+            // if (('transform' in a.element["animatedAttributes"][state1].attributes) && ('transform' in a.element["animatedAttributes"][state2].attributes)){
+            //     // console.log(state1,state2,a.element["animatedAttributes"][state1].attributes["transform"],a.element["animatedAttributes"][state2].attributes["transform"]);
+            //     // delete copyAttributes1["transform"];
+            //     // delete copyAttributes2["transform"];
+            // console.log("xxx");
+            //     //WARNING if other attributes on g will not work !!!!!!!!!!!!!!
+            //     d3.select(a.element).transition()
+            //         .duration(duration)
+            //         .attrTween("transform", tween);
+
+            //     function tween() {
+            //         return d3.interpolateString(a.element["animatedAttributes"][state1].attributes["transform"], a.element["animatedAttributes"][state2].attributes["transform"]);
+            //     }
+
+            // }
+            // console.log(copyAttributes1,copyAttributes2);
+
+            var t1 = a.element["animatedAttributes"][state1].attributes.transform;
+            var t2 = a.element["animatedAttributes"][state2].attributes.transform;
+            delete a.element["animatedAttributes"][state1].attributes.transform;
+            delete a.element["animatedAttributes"][state2].attributes.transform;
+            var ettrs1 = a.element["animatedAttributes"][state1].attributes;
+            var ettrs2 = a.element["animatedAttributes"][state2].attributes;
+            var keys = Object.keys(ettrs1);
+            // for (var i = 0; i < keys.length; i++) {
+            //     console.log(ettrs2[keys[i]])
+                    
+            //     d3.select(a.element).transition()
+            //         .duration(duration)
+            //         .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
+            // };
+                d3.select(a.element)
+                    .attr(ettrs1)
+                    .transition()
+                    .duration(duration)
+                    .attr(ettrs2)
+                    .attrTween("transform",function() { if (t1 && t2) {return d3.interpolate(t1, t2)} });
+            
+             a.element["animatedAttributes"][state2].attributes.transform =t2;       
+             a.element["animatedAttributes"][state1].attributes.transform =t1;  
+                // d3.select(a.element).transition()
+                //     .duration(duration)
+                //     .attrTween(keys[i],function() {return d3.interpolate(ettrs1[keys[i]], ettrs2[keys[i]])});
+
+                // d3.select(a.element)
+                //     .attr({"fill":"red","opacity":0.5})
+                //     .transition()
+                //     .duration(duration)
+                //     .attr({"fill":"blue","opacity":1})
+            
+            
+
+
+        };
+
+        $scope.animateGlobal = function(parent) {
+            var statesObject, sortedStatesObject
+
+            function _animateGlobal(a) {
+                statesObject = a.element["animatedAttributes"];
+                sortedStatesObject = statesObject.sort(function(a, b) {
+                    return a.time - b.time;
+                });
+                a.element["animatedAttributes"] = sortedStatesObject;
+                for (var i = 0; i < sortedStatesObject.length - 1; i++) {
+                    setTimeout(function(j, sortedStatesObject) {
+                        return function() {
+                            $scope.animateElement(a, j, (j + 1), (sortedStatesObject[j + 1].time - sortedStatesObject[j].time));
+                        }
+                    }(i, sortedStatesObject), sortedStatesObject[i].time);
+                };
+
+                for (var i = 0; i < a.children.length; i++) {
+                    _animateGlobal(a.children[i]);
+                };
             };
+            _animateGlobal(parent);
         };
 
 
@@ -158,9 +230,7 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
 
             function _saveStates(a) {
                 var obj = {};
-                for (var i = 0; i < $scope.stateList.length; i++) {
-                    obj[$scope.stateList[i]] = JSON.stringify(a.element[$scope.stateList[i]]);
-                };
+                obj["animatedAttributes"] = JSON.stringify(a.element["animatedAttributes"]);
                 obj.children = [];
                 for (var i = 0; i < a.children.length; i++) {
                     obj.children.push(_saveStates(a.children[i]));
@@ -175,36 +245,17 @@ app.controller('ImportCtrl', ['$scope', 'Airport',
 
         $scope.loadFromObject = function(parent, savedStates) {
             var savedObject = JSON.parse(savedStates);
-            $scope.stateList = Object.keys(JSON.parse(savedStates));
-            $scope.stateList = $scope.stateList.slice(0, -1);
-            // console.log(savedObject);
+
             var parent = parent;
-            var nbStates = Object.keys(savedObject).length - 1;
 
             function _loadStates(a, save) {
-                for (var i = 0; i < nbStates; i++) {
-                    a.element["attributes_" + (i + 1)] = JSON.parse(save["attributes_" + (i + 1)]);
-                };
+                a.element["animatedAttributes"] = JSON.parse(save["animatedAttributes"]);
                 for (var i = 0; i < a.children.length; i++) {
                     _loadStates(a.children[i], save.children[i]);
                 };
             };
             _loadStates(parent, savedObject);
         };
-
-        //todo reload the value in the form
-
-
-
-        // $scope.attributesOfObject= function(a) {
-        //     obj = {};
-        //     console.log(a[$scope.attributesName]);
-        //     for (var i = 0; i < a[$scope.attributesName].length; i++) {
-        //         obj[a[$scope.attributesName][i].name] = a[$scope.attributesName][i].value;
-        //     };
-        //     console.log(obj)
-        //     return obj;
-        // };
 
     }
 ]);
